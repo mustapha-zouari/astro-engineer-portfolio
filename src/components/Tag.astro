@@ -1,0 +1,63 @@
+---
+interface Props {
+    name: string;
+}
+
+const { name } = Astro.props as Props;
+---
+
+<span class="tag">{name}</span>
+
+<style>
+    .tag {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.38rem 0.75rem;
+        border-radius: 999px;
+        border: 1px solid var(--tag-border);
+        background: var(--tag-bg);
+        color: var(--tag-text);
+        font-size: clamp(0.72rem, 0.65rem + 0.2vw, 0.88rem);
+        font-weight: 600;
+        line-height: 1;
+        letter-spacing: 0;
+        box-shadow: 0 1px 2px var(--tag-shadow);
+        transition:
+            background-color var(--transition-speed) ease,
+            border-color var(--transition-speed) ease,
+            color var(--transition-speed) ease,
+            transform var(--transition-speed) ease,
+            box-shadow var(--transition-speed) ease;
+        user-select: none;
+        white-space: nowrap;
+    }
+
+    .tag:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px var(--tag-shadow-hover);
+    }
+
+    :global(:root) {
+        --tag-bg: #eff6ff;
+        --tag-border: #bfdbfe;
+        --tag-text: #1e3a8a;
+        --tag-shadow: rgba(37, 99, 235, 0.08);
+        --tag-shadow-hover: rgba(37, 99, 235, 0.12);
+    }
+
+    :global(:root.dark) {
+        --tag-bg: rgba(59, 130, 246, 0.12);
+        --tag-border: rgba(96, 165, 250, 0.35);
+        --tag-text: #dbeafe;
+        --tag-shadow: rgba(0, 0, 0, 0.18);
+        --tag-shadow-hover: rgba(0, 0, 0, 0.28);
+    }
+
+    @media (max-width: 768px) {
+        .tag {
+            padding: 0.34rem 0.68rem;
+            font-size: 0.78rem;
+        }
+    }
+</style>

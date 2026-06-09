@@ -1,0 +1,246 @@
+---
+import { Icon } from 'astro-icon/components';
+import { blogData } from '../data/blog';
+import Tag from './Tag.astro';
+
+interface Props {
+    title: string;
+    description: string;
+    tags: string[];
+    publishedAt?: Date;
+    href?: string;
+    locked?: boolean;
+}
+
+const { title, description, tags, publishedAt, href, locked = false } = Astro.props as Props;
+
+const formattedDate = publishedAt
+    ? new Intl.DateTimeFormat('en', {
+          dateStyle: 'medium',
+      }).format(publishedAt)
+    : undefined;
+---
+
+{
+    locked ? (
+        <article
+            class="blog-card blog-card-locked"
+            aria-label={`${title} ${blogData.lockedAriaSuffix}`}
+        >
+            <div class="blog-card-body">
+                <div class="blog-card-status">
+                    <Icon name="mdi:lock-outline" class="blog-card-lock-icon" aria-hidden="true" />
+                    <span>{blogData.lockedLabel}</span>
+                </div>
+                <div class="blog-card-copy">
+                    <h2>{title}</h2>
+                    <p class="blog-card-description">{description}</p>
+                </div>
+                <div class="blog-card-footer">
+                    <div class="blog-card-tags">
+                        {tags.map((tag) => (
+                            <Tag name={tag} />
+                        ))}
+                    </div>
+                    {publishedAt && formattedDate ? (
+                        <time class="blog-card-date" datetime={publishedAt.toISOString()}>
+                            {formattedDate}
+                        </time>
+                    ) : null}
+                </div>
+            </div>
+        </article>
+    ) : (
+        <a href={href} class="blog-card">
+            <div class="blog-card-body">
+                <div class="blog-card-copy">
+                    <h2>{title}</h2>
+                    <p class="blog-card-description">{description}</p>
+                </div>
+                <div class="blog-card-footer">
+                    <div class="blog-card-tags">
+                        {tags.map((tag) => (
+                            <Tag name={tag} />
+                        ))}
+                    </div>
+                    {publishedAt && formattedDate ? (
+                        <time class="blog-card-date" datetime={publishedAt.toISOString()}>
+                            {formattedDate}
+                        </time>
+                    ) : null}
+                </div>
+            </div>
+        </a>
+    )
+}
+
+<style>
+    .blog-card {
+        position: relative;
+        display: block;
+        min-height: 240px;
+        border: 1px solid var(--card-border);
+        border-radius: var(--border-radius-lg);
+        background: var(--card-bg);
+        color: inherit;
+        box-shadow: 0 4px 12px var(--card-shadow);
+        overflow: hidden;
+        transition:
+            transform var(--transition-speed) ease,
+            box-shadow var(--transition-speed) ease,
+            border-color var(--transition-speed) ease,
+            opacity var(--transition-speed) ease;
+    }
+
+    a.blog-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 24px var(--card-shadow);
+        text-decoration: none;
+    }
+
+    .blog-card-locked {
+        border-color: var(--locked-card-border);
+        background: var(--locked-card-bg);
+        color: var(--color-text-light);
+        cursor: not-allowed;
+    }
+
+    .blog-card-locked::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: var(--locked-card-overlay);
+        pointer-events: none;
+    }
+
+    .blog-card-body {
+        position: relative;
+        z-index: 1;
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
+        padding: var(--spacing-lg);
+    }
+
+    .blog-card-status {
+        display: inline-flex;
+        width: max-content;
+        max-width: 100%;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.35rem 0.65rem;
+        border: 1px solid var(--locked-status-border);
+        border-radius: 999px;
+        background: var(--locked-status-bg);
+        color: var(--locked-status-text);
+        font-size: 0.82rem;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .blog-card-lock-icon {
+        width: 1rem;
+        height: 1rem;
+        flex: 0 0 auto;
+    }
+
+    .blog-card-copy {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        flex: 1;
+        min-height: 0;
+    }
+
+    .blog-card h2 {
+        min-height: 4.05rem;
+        font-size: 1.45rem;
+        line-height: 1.35;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+    }
+
+    .blog-card-description {
+        min-height: 4.25rem;
+        color: var(--color-text-light);
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+    }
+
+    .blog-card-footer {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+        align-items: end;
+        justify-content: space-between;
+        margin-top: auto;
+    }
+
+    .blog-card-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .blog-card-date {
+        font-size: 0.9rem;
+        color: var(--color-text-lighter);
+        white-space: nowrap;
+        text-align: right;
+    }
+
+    :global(:root) {
+        --locked-card-bg: #f8fafc;
+        --locked-card-border: #cbd5e1;
+        --locked-card-overlay: linear-gradient(
+            135deg,
+            rgba(148, 163, 184, 0.05),
+            rgba(15, 23, 42, 0.08)
+        );
+        --locked-status-bg: #fef2f2;
+        --locked-status-border: #fecaca;
+        --locked-status-text: #b91c1c;
+    }
+
+    :global(:root.dark) {
+        --locked-card-bg: #182235;
+        --locked-card-border: #475569;
+        --locked-card-overlay: linear-gradient(
+            135deg,
+            rgba(148, 163, 184, 0.08),
+            rgba(0, 0, 0, 0.16)
+        );
+        --locked-status-bg: rgba(248, 113, 113, 0.14);
+        --locked-status-border: rgba(248, 113, 113, 0.42);
+        --locked-status-text: #fca5a5;
+    }
+
+    @media (max-width: 768px) {
+        .blog-card-body {
+            padding: var(--spacing-md);
+            gap: var(--spacing-sm);
+        }
+
+        .blog-card h2 {
+            min-height: 0;
+            font-size: 1.25rem;
+        }
+
+        .blog-card-description {
+            min-height: 0;
+        }
+
+        .blog-card-footer {
+            align-items: start;
+        }
+
+        .blog-card-date {
+            white-space: normal;
+        }
+    }
+</style>

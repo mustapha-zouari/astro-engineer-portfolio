@@ -1,0 +1,263 @@
+---
+import { homeData } from '../data/home';
+
+const allCards = homeData.careerHighlights
+    .flatMap((highlight) =>
+        highlight.values.map((value) => ({
+            icon: highlight.icon,
+            category: highlight.category,
+            title: value.title,
+            subtitle: value.subtitle,
+            fromDate: value.fromDate,
+            toDate: value.toDate,
+        }))
+    )
+    .sort((a, b) => {
+        const getYear = (date: string) => (date === 'Present' ? 9999 : parseInt(date));
+        return getYear(b.fromDate) - getYear(a.fromDate);
+    });
+---
+
+<section class="career-highlights">
+    <div class="highlights-container">
+        <div class="highlight-slider">
+            {
+                allCards.map((card, index) => (
+                    <div class={`highlight-item ${index === 0 ? 'active' : ''}`}>
+                        <div class="highlight-header">
+                            <span class="highlight-icon">{card.icon}</span>
+                            <span class="highlight-category">{card.category}</span>
+                        </div>
+                        <div class="highlight-content">
+                            <span class="highlight-title">{card.title}</span>
+                            <span class="highlight-subtitle">{card.subtitle}</span>
+                            <span class="highlight-dates">
+                                {card.fromDate} - {card.toDate}
+                            </span>
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+        <div class="slider-dots">
+            {
+                allCards.map((_, index) => (
+                    <span class={`dot ${index === 0 ? 'active' : ''}`} data-index={index} />
+                ))
+            }
+        </div>
+    </div>
+</section>
+
+<script>
+    let currentIndex = 0;
+    const items = document.querySelectorAll('.highlight-item');
+    const dots = document.querySelectorAll('.dot');
+    const totalItems = items.length;
+    let autoSlideInterval: ReturnType<typeof setInterval>;
+
+    function showSlide(index: number) {
+        if (!items[index] || !dots[index]) {
+            return;
+        }
+
+        items.forEach((item) => item.classList.remove('active'));
+        dots.forEach((dot) => dot.classList.remove('active'));
+
+        items[index].classList.add('active');
+        dots[index].classList.add('active');
+    }
+
+    function nextSlide() {
+        if (totalItems < 2) {
+            return;
+        }
+
+        currentIndex = (currentIndex + 1) % totalItems;
+        showSlide(currentIndex);
+    }
+
+    function startAutoSlide() {
+        if (autoSlideInterval) {
+            clearInterval(autoSlideInterval);
+        }
+
+        if (totalItems < 2) {
+            return;
+        }
+
+        autoSlideInterval = setInterval(nextSlide, 3000);
+    }
+
+    function resetTimer() {
+        startAutoSlide();
+    }
+
+    startAutoSlide();
+
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            currentIndex = index;
+            showSlide(currentIndex);
+            resetTimer();
+        });
+    });
+</script>
+
+<style>
+    .career-highlights {
+        padding: var(--spacing-lg) var(--spacing-md);
+        background: var(--color-bg);
+        overflow: hidden;
+    }
+
+    .highlights-container {
+        max-width: 700px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+
+    .highlight-slider {
+        position: relative;
+        min-height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .highlight-item {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
+        padding: var(--spacing-lg);
+        background: var(--card-bg);
+        border-radius: var(--border-radius-lg);
+        box-shadow: 0 4px 12px var(--card-shadow);
+        border: 1px solid var(--card-border);
+        width: 100%;
+        max-width: 600px;
+        opacity: 0;
+        transform: translateX(100px);
+        transition: all 0.6s ease;
+        pointer-events: none;
+    }
+
+    .highlight-item.active {
+        opacity: 1;
+        transform: translateX(0);
+        pointer-events: auto;
+    }
+
+    .highlight-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--spacing-sm);
+        text-align: center;
+    }
+
+    .highlight-icon {
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .highlight-category {
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--color-text-lighter);
+    }
+
+    .highlight-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .highlight-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--color-secondary);
+        line-height: 1.3;
+    }
+
+    .highlight-subtitle {
+        font-size: 1rem;
+        color: var(--color-text-light);
+        font-weight: 500;
+    }
+
+    .highlight-dates {
+        font-size: 0.9rem;
+        color: var(--color-text-lighter);
+        font-weight: 400;
+        margin-top: 0.25rem;
+    }
+
+    .slider-dots {
+        display: flex;
+        justify-content: center;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm) 0;
+    }
+
+    .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--color-border);
+        cursor: pointer;
+        transition: all var(--transition-speed) ease;
+    }
+
+    .dot:hover {
+        background: var(--color-text-light);
+        transform: scale(1.2);
+    }
+
+    .dot.active {
+        background: var(--color-primary);
+        width: 30px;
+        border-radius: 6px;
+    }
+
+    @media (max-width: 768px) {
+        .career-highlights {
+            padding: var(--spacing-md);
+        }
+
+        .highlight-slider {
+            min-height: 140px;
+        }
+
+        .highlight-item {
+            padding: var(--spacing-md);
+        }
+
+        .highlight-icon {
+            font-size: 1.3rem;
+        }
+
+        .highlight-category {
+            font-size: 0.75rem;
+        }
+
+        .highlight-title {
+            font-size: 1.1rem;
+        }
+
+        .highlight-subtitle {
+            font-size: 0.9rem;
+        }
+
+        .highlight-dates {
+            font-size: 0.85rem;
+        }
+    }
+</style>

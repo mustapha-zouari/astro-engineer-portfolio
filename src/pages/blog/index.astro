@@ -1,0 +1,72 @@
+---
+import { getCollection } from 'astro:content';
+import MainLayout from '../../layouts/MainLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { blogData } from '../../data/blog';
+import { siteConfig } from '../../data/site';
+
+const posts = (await getCollection('blog')).sort(
+    (a, b) => (b.data.publishedAt?.getTime() ?? 0) - (a.data.publishedAt?.getTime() ?? 0)
+);
+---
+
+<MainLayout
+    title={`${siteConfig.fullName} - ${blogData.pageTitleSuffix}`}
+    description={`${blogData.pageDescriptionPrefix} ${siteConfig.fullName}`}
+>
+    <section class="blog-section">
+        <div class="blog-container">
+            <div class="blog-grid">
+                {
+                    posts.map((post) => (
+                        <BlogCard
+                            title={post.data.title}
+                            description={post.data.description}
+                            tags={post.data.tags}
+                            publishedAt={post.data.publishedAt}
+                            href={post.data.id ? `/blog/${post.data.id}` : undefined}
+                            locked={post.data.locked}
+                        />
+                    ))
+                }
+            </div>
+        </div>
+    </section>
+</MainLayout>
+
+<style>
+    .blog-section {
+        padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-xxl);
+    }
+
+    .blog-container {
+        max-width: var(--max-width-container);
+        margin: 0 auto;
+    }
+
+    .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--spacing-lg);
+    }
+
+    @media (max-width: 1024px) {
+        .blog-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 768px) {
+        .blog-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .blog-card-footer {
+            align-items: start;
+        }
+
+        .blog-card-date {
+            white-space: normal;
+        }
+    }
+</style>

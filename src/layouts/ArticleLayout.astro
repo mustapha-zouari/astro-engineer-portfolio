@@ -1,0 +1,339 @@
+---
+import MainLayout from './MainLayout.astro';
+import Tag from '../components/Tag.astro';
+import { blogData } from '../data/blog';
+import '../styles/markdown.css';
+
+interface Props {
+    title: string;
+    description?: string;
+    tags: string[];
+    publishedAt?: Date;
+    headings?: {
+        depth: number;
+        slug: string;
+        text: string;
+    }[];
+}
+
+const { title, description, tags, publishedAt, headings = [] } = Astro.props as Props;
+const tableOfContents = headings.filter((heading) => heading.depth === 2);
+
+const formattedDate = publishedAt
+    ? new Intl.DateTimeFormat('en', {
+          dateStyle: 'medium',
+      }).format(publishedAt)
+    : undefined;
+---
+
+<MainLayout title={title} description={description ?? title} keywords={tags.join(', ')}>
+    <article class="article-page">
+        <header class="article-header content-wrapper">
+            <h1>{title}</h1>
+            {description ? <p class="article-description">{description}</p> : null}
+            <div class="article-meta">
+                <div class="article-tags">
+                    {tags.map((tag) => <Tag name={tag} />)}
+                </div>
+                {
+                    formattedDate ? (
+                        <time datetime={publishedAt?.toISOString()}>{formattedDate}</time>
+                    ) : null
+                }
+            </div>
+        </header>
+        <div class="article-body content-wrapper">
+            {
+                tableOfContents.length > 0 ? (
+                    <nav class="article-toc" aria-labelledby="article-toc-title">
+                        <h2 id="article-toc-title">{blogData.article.tableOfContentsLabel}</h2>
+                        <ol>
+                            {tableOfContents.map((heading) => (
+                                <li>
+                                    <button type="button" data-toc-target={heading.slug}>
+                                        {heading.text}
+                                    </button>
+                                </li>
+                            ))}
+                        </ol>
+                    </nav>
+                ) : null
+            }
+            <slot />
+        </div>
+    </article>
+    <div class="article-image-lightbox" data-image-lightbox hidden>
+        <button
+            class="article-image-lightbox-backdrop"
+            type="button"
+            data-image-lightbox-close
+            aria-label={blogData.article.closeImagePreviewLabel}></button>
+        <figure class="article-image-lightbox-frame">
+            <img data-image-lightbox-image alt="" />
+            <button
+                class="article-image-lightbox-close"
+                type="button"
+                data-image-lightbox-close
+                aria-label={blogData.article.closeImagePreviewLabel}
+            >
+                ×
+            </button>
+        </figure>
+    </div>
+</MainLayout>
+
+<script>
+    document.querySelectorAll<HTMLButtonElement>('[data-toc-target]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const targetId = button.dataset.tocTarget;
+            const target = targetId ? document.getElementById(targetId) : null;
+
+            target?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+            });
+        });
+    });
+
+    const lightbox = document.querySelector<HTMLElement>('[data-image-lightbox]');
+    const lightboxImage = document.querySelector<HTMLImageElement>('[data-image-lightbox-image]');
+    const closeButtons = document.querySelectorAll<HTMLButtonElement>(
+        '[data-image-lightbox-close]'
+    );
+
+    const closeLightbox = () => {
+        if (!lightbox || !lightboxImage) {
+            return;
+        }
+
+        lightbox.hidden = true;
+        document.documentElement.classList.remove('has-image-lightbox');
+        lightboxImage.removeAttribute('src');
+        lightboxImage.alt = '';
+    };
+
+    document.querySelectorAll<HTMLImageElement>('.markdown-content img').forEach((image) => {
+        image.tabIndex = 0;
+
+        const openLightbox = () => {
+            if (!lightbox || !lightboxImage) {
+                return;
+            }
+
+            lightboxImage.src = image.currentSrc || image.src;
+            lightboxImage.alt = image.alt;
+            lightbox.hidden = false;
+            document.documentElement.classList.add('has-image-lightbox');
+        };
+
+        image.addEventListener('click', openLightbox);
+        image.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                openLightbox();
+            }
+        });
+    });
+
+    closeButtons.forEach((button) => {
+        button.addEventListener('click', closeLightbox);
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && lightbox && !lightbox.hidden) {
+            closeLightbox();
+        }
+    });
+</script>
+
+<style>
+    .article-page {
+        padding-bottom: var(--spacing-xl);
+    }
+
+    .article-header,
+    .article-body {
+        max-width: var(--max-width-container);
+        padding-left: var(--spacing-lg);
+        padding-right: var(--spacing-lg);
+    }
+
+    .article-header > *,
+    .article-body > * {
+        max-width: var(--max-width-content);
+    }
+
+    .article-header h1 {
+        max-width: 24ch;
+        font-size: 3rem;
+        margin-bottom: var(--spacing-md);
+    }
+
+    .article-description {
+        max-width: 68ch;
+        font-size: 1.1rem;
+        color: var(--color-text-light);
+        margin-bottom: var(--spacing-md);
+    }
+
+    .article-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+        align-items: end;
+        justify-content: space-between;
+        color: var(--color-text-lighter);
+    }
+
+    .article-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .article-body {
+        padding-top: 0;
+    }
+
+    .article-toc {
+        margin-bottom: var(--spacing-lg);
+        padding: var(--spacing-md);
+        border: 1px solid var(--color-border);
+        border-radius: var(--border-radius);
+        background: var(--color-bg-light);
+    }
+
+    .article-toc h2 {
+        margin: 0 0 var(--spacing-sm);
+        font-size: 1rem;
+        color: var(--color-secondary);
+    }
+
+    .article-toc ol {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.55rem;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .article-toc li {
+        min-width: 0;
+    }
+
+    .article-toc button {
+        display: block;
+        width: 100%;
+        border: 0;
+        padding: 0;
+        background: transparent;
+        color: var(--color-text-light);
+        font: inherit;
+        font-size: 0.95rem;
+        line-height: 1.35;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    .article-toc button:hover,
+    .article-toc button:focus-visible {
+        color: var(--color-primary);
+    }
+
+    .article-toc button:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 3px;
+        border-radius: 4px;
+    }
+
+    .article-image-lightbox[hidden] {
+        display: none;
+    }
+
+    .article-image-lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        display: grid;
+        place-items: center;
+        padding: var(--spacing-lg);
+    }
+
+    .article-image-lightbox-backdrop {
+        position: absolute;
+        inset: 0;
+        border: 0;
+        background: rgba(15, 23, 42, 0.78);
+        cursor: zoom-out;
+    }
+
+    .article-image-lightbox-frame {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        margin: 0;
+        max-width: min(1120px, 94vw);
+        max-height: 88vh;
+    }
+
+    .article-image-lightbox-frame img {
+        display: block;
+        max-width: 100%;
+        max-height: 88vh;
+        border: 1px solid var(--color-border);
+        border-radius: var(--border-radius-lg);
+        background: var(--color-bg);
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+        object-fit: contain;
+    }
+
+    .article-image-lightbox-close {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        width: 2.25rem;
+        height: 2.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.76);
+        color: #ffffff;
+        font-size: 1.6rem;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    :global(.has-image-lightbox) {
+        overflow: hidden;
+    }
+
+    :global(.has-image-lightbox [data-theme-toggle]),
+    :global(.has-image-lightbox .back-to-top) {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
+        .article-header h1 {
+            font-size: 2.1rem;
+            max-width: 100%;
+        }
+
+        .article-description {
+            font-size: 1rem;
+        }
+
+        .article-meta {
+            align-items: start;
+        }
+
+        .article-toc {
+            padding: var(--spacing-sm) 4.25rem var(--spacing-sm) var(--spacing-sm);
+        }
+
+        .article-image-lightbox {
+            padding: var(--spacing-sm);
+        }
+    }
+</style>

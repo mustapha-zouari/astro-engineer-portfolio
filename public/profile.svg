@@ -1,0 +1,11 @@
+<svg width="480" height="480" viewBox="0 0 480 480" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Profile placeholder</title>
+  <desc id="desc">Abstract profile illustration for the portfolio template.</desc>
+  <rect width="480" height="480" rx="240" fill="#E0F2FE"/>
+  <circle cx="240" cy="178" r="86" fill="#0F766E"/>
+  <path d="M92 410c20-88 78-134 148-134s128 46 148 134H92Z" fill="#2563EB"/>
+  <circle cx="208" cy="168" r="12" fill="#ECFEFF"/>
+  <circle cx="272" cy="168" r="12" fill="#ECFEFF"/>
+  <path d="M206 220c21 17 47 17 68 0" stroke="#ECFEFF" stroke-width="14" stroke-linecap="round"/>
+  <path d="M146 118c24-54 82-82 142-68 55 13 91 58 96 114-38-10-70-27-96-52-42 36-89 50-142 6Z" fill="#134E4A"/>
+</svg>

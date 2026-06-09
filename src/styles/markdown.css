@@ -1,0 +1,490 @@
+.markdown-content {
+    display: grid;
+    gap: 1.1rem;
+    min-width: 0;
+    color: var(--color-text);
+    font-size: 1.05rem;
+    --markdown-code-bg: #ffffff;
+    --markdown-code-border: #b8c4d1;
+    --markdown-code-text: #111827;
+    --markdown-code-shadow: rgba(15, 23, 42, 0.06);
+    --markdown-inline-code-bg: #f2f6fb;
+    --markdown-inline-code-border: #d8e1ec;
+    --markdown-inline-code-text: #3f3f8f;
+    --markdown-code-scrollbar: #aab7c6;
+    --markdown-warning-bg: #fffbeb;
+    --markdown-warning-border: #f59e0b;
+    --markdown-warning-icon: #b45309;
+    --markdown-warning-title: #92400e;
+    --markdown-tip-bg: #ecfdf5;
+    --markdown-tip-border: #10b981;
+    --markdown-tip-icon: #047857;
+    --markdown-tip-title: #065f46;
+    --markdown-info-bg: #eff6ff;
+    --markdown-info-border: #3b82f6;
+    --markdown-info-icon: #2563eb;
+    --markdown-info-title: #1d4ed8;
+    --markdown-question-bg: #f8fafc;
+    --markdown-question-border: #93c5fd;
+    --markdown-question-icon-bg: #dbeafe;
+    --markdown-question-icon-text: #1d4ed8;
+    --markdown-question-text: #1e293b;
+    --markdown-question-positive-border: #10b981;
+    --markdown-question-positive-icon-bg: #d1fae5;
+    --markdown-question-positive-icon-text: #047857;
+    --markdown-question-negative-border: #f97316;
+    --markdown-question-negative-icon-bg: #ffedd5;
+    --markdown-question-negative-icon-text: #c2410c;
+}
+
+:root.dark .markdown-content {
+    --markdown-code-bg: #1e1e1e;
+    --markdown-code-border: #3c3c3c;
+    --markdown-code-text: #d4d4d4;
+    --markdown-code-shadow: rgba(0, 0, 0, 0.32);
+    --markdown-inline-code-bg: #252526;
+    --markdown-inline-code-border: #3c3c3c;
+    --markdown-inline-code-text: #dcdcaa;
+    --markdown-code-scrollbar: #6a6a6a;
+    --markdown-warning-bg: rgba(245, 158, 11, 0.12);
+    --markdown-warning-border: #fbbf24;
+    --markdown-warning-icon: #fbbf24;
+    --markdown-warning-title: #fde68a;
+    --markdown-tip-bg: rgba(16, 185, 129, 0.12);
+    --markdown-tip-border: #34d399;
+    --markdown-tip-icon: #34d399;
+    --markdown-tip-title: #a7f3d0;
+    --markdown-info-bg: rgba(59, 130, 246, 0.14);
+    --markdown-info-border: #60a5fa;
+    --markdown-info-icon: #93c5fd;
+    --markdown-info-title: #bfdbfe;
+    --markdown-question-bg: rgba(30, 41, 59, 0.72);
+    --markdown-question-border: #60a5fa;
+    --markdown-question-icon-bg: rgba(96, 165, 250, 0.18);
+    --markdown-question-icon-text: #bfdbfe;
+    --markdown-question-text: #e2e8f0;
+    --markdown-question-positive-border: #34d399;
+    --markdown-question-positive-icon-bg: rgba(52, 211, 153, 0.18);
+    --markdown-question-positive-icon-text: #a7f3d0;
+    --markdown-question-negative-border: #fb923c;
+    --markdown-question-negative-icon-bg: rgba(251, 146, 60, 0.18);
+    --markdown-question-negative-icon-text: #fed7aa;
+}
+
+.markdown-content > :first-child {
+    margin-top: 0;
+}
+
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4 {
+    scroll-margin-top: 5rem;
+    color: var(--color-secondary);
+    margin-top: 1.5rem;
+}
+
+.markdown-content p,
+.markdown-content li {
+    color: var(--color-text);
+}
+
+.markdown-content ul,
+.markdown-content ol {
+    padding-left: 1.35rem;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.markdown-content blockquote {
+    display: grid;
+    gap: 0.55rem;
+    margin: 0.25rem 0;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--markdown-callout-border);
+    border-radius: var(--border-radius);
+    background: var(--markdown-callout-bg);
+    color: var(--color-text);
+}
+
+.markdown-content blockquote p {
+    margin: 0;
+    color: inherit;
+}
+
+.markdown-content blockquote p:first-child strong {
+    display: block;
+    color: var(--color-secondary);
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.markdown-content .markdown-question {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: center;
+    margin: 0.1rem 0;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--markdown-question-border);
+    border-left-width: 4px;
+    border-radius: var(--border-radius);
+    background: var(--markdown-question-bg);
+    color: var(--markdown-question-text);
+}
+
+.markdown-content .markdown-question::before {
+    content: '?';
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    background: var(--markdown-question-icon-bg);
+    color: var(--markdown-question-icon-text);
+    font-weight: 800;
+    line-height: 1;
+}
+
+.markdown-content .markdown-question p {
+    margin: 0;
+    font-weight: 650;
+    line-height: 1.45;
+}
+
+.markdown-content .markdown-question-positive {
+    border-color: var(--markdown-question-positive-border);
+}
+
+.markdown-content .markdown-question-positive::before {
+    content: '✓';
+    background: var(--markdown-question-positive-icon-bg);
+    color: var(--markdown-question-positive-icon-text);
+}
+
+.markdown-content .markdown-question-negative {
+    border-color: var(--markdown-question-negative-border);
+}
+
+.markdown-content .markdown-question-negative::before {
+    content: '!';
+    background: var(--markdown-question-negative-icon-bg);
+    color: var(--markdown-question-negative-icon-text);
+}
+
+.markdown-content .markdown-senior-angle {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: start;
+    margin: 0.25rem 0;
+    padding: 0.95rem 1rem;
+    border: 1px solid var(--markdown-tip-border);
+    border-left-width: 4px;
+    border-radius: var(--border-radius);
+    background: var(--markdown-tip-bg);
+}
+
+.markdown-content .markdown-senior-angle::before {
+    content: '✓';
+    display: grid;
+    place-items: center;
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 999px;
+    background: var(--markdown-question-positive-icon-bg);
+    color: var(--markdown-question-positive-icon-text);
+    font-weight: 800;
+    line-height: 1;
+}
+
+.markdown-content .markdown-senior-angle strong {
+    grid-column: 2;
+    display: block;
+    margin-bottom: 0.2rem;
+    color: var(--markdown-tip-title);
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.markdown-content .markdown-senior-angle p {
+    grid-column: 2;
+    margin: 0;
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+.markdown-content .markdown-callout {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+    gap: 0.8rem;
+    align-items: start;
+    margin: 0.25rem 0;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--color-border);
+    border-left-width: 4px;
+    border-radius: var(--border-radius);
+}
+
+.markdown-content .markdown-callout::before {
+    content: '';
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-top: 0.1rem;
+    background: currentColor;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+}
+
+.markdown-content .markdown-callout strong {
+    grid-column: 2;
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.markdown-content .markdown-callout p {
+    grid-column: 2;
+    margin: 0;
+    color: var(--color-text);
+}
+
+.markdown-content .markdown-callout-warning {
+    border-color: var(--markdown-warning-border);
+    background: var(--markdown-warning-bg);
+    color: var(--markdown-warning-icon);
+}
+
+.markdown-content .markdown-callout-warning::before {
+    mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2 1 21h22L12 2Zm0 6c.55 0 1 .45 1 1v5a1 1 0 1 1-2 0V9c0-.55.45-1 1-1Zm0 10.75a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5Z'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2 1 21h22L12 2Zm0 6c.55 0 1 .45 1 1v5a1 1 0 1 1-2 0V9c0-.55.45-1 1-1Zm0 10.75a1.25 1.25 0 1 1 0-2.5 1.25 1.25 0 0 1 0 2.5Z'/%3E%3C/svg%3E");
+}
+
+.markdown-content .markdown-callout-warning strong {
+    color: var(--markdown-warning-title);
+}
+
+.markdown-content .markdown-callout-tip {
+    border-color: var(--markdown-tip-border);
+    background: var(--markdown-tip-bg);
+    color: var(--markdown-tip-icon);
+}
+
+.markdown-content .markdown-callout-tip::before {
+    mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9 21h6v-1H9v1Zm3-19a7 7 0 0 0-4 12.75V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.25A7 7 0 0 0 12 2Zm2.5 11.3-.5.3V16h-4v-2.4l-.5-.3A5 5 0 1 1 14.5 13.3Z'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9 21h6v-1H9v1Zm3-19a7 7 0 0 0-4 12.75V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.25A7 7 0 0 0 12 2Zm2.5 11.3-.5.3V16h-4v-2.4l-.5-.3A5 5 0 1 1 14.5 13.3Z'/%3E%3C/svg%3E");
+}
+
+.markdown-content .markdown-callout-tip strong {
+    color: var(--markdown-tip-title);
+}
+
+.markdown-content .markdown-callout-info {
+    border-color: var(--markdown-info-border);
+    background: var(--markdown-info-bg);
+    color: var(--markdown-info-icon);
+}
+
+.markdown-content .markdown-callout-info::before {
+    mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 17h2v-6h-2v6Zm1-8a1.25 1.25 0 1 0 0-2.5A1.25 1.25 0 0 0 12 9Zm0 13a10 10 0 1 1 0-20 10 10 0 0 1 0 20Z'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 17h2v-6h-2v6Zm1-8a1.25 1.25 0 1 0 0-2.5A1.25 1.25 0 0 0 12 9Zm0 13a10 10 0 1 1 0-20 10 10 0 0 1 0 20Z'/%3E%3C/svg%3E");
+}
+
+.markdown-content .markdown-callout-info strong {
+    color: var(--markdown-info-title);
+}
+
+.markdown-content pre {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    padding: 1rem 1.25rem;
+    border-radius: 6px;
+    border: 1px solid var(--markdown-code-border);
+    background: var(--markdown-code-bg) !important;
+    color: var(--markdown-code-text);
+    box-shadow: 0 10px 28px var(--markdown-code-shadow);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-color: var(--markdown-code-scrollbar) var(--markdown-code-bg);
+}
+
+.markdown-content pre code {
+    background: var(--markdown-code-bg) !important;
+    color: var(--markdown-code-text);
+}
+
+.markdown-content code {
+    background: var(--markdown-inline-code-bg);
+    border: 1px solid var(--markdown-inline-code-border);
+    color: var(--markdown-inline-code-text);
+    padding: 0.12rem 0.32rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.markdown-content pre code {
+    display: block;
+    min-width: max-content;
+    border: 0;
+    padding: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.65;
+    white-space: pre;
+}
+
+:root:not(.dark) .markdown-content pre code span[style] {
+    color: inherit !important;
+    font-weight: 500;
+}
+
+:root:not(.dark) .markdown-content pre code span[style*='#F97583'],
+:root:not(.dark) .markdown-content pre code span[style*='#B392F0'] {
+    color: #6f004f !important;
+    font-weight: 600;
+}
+
+:root:not(.dark) .markdown-content pre code span[style*='#9ECBFF'] {
+    color: #0033b3 !important;
+}
+
+:root:not(.dark) .markdown-content pre code span[style*='#79B8FF'],
+:root:not(.dark) .markdown-content pre code span[style*='#FFAB70'] {
+    color: #001a9e !important;
+    font-weight: 600;
+}
+
+:root:not(.dark) .markdown-content pre code span[style*='#6A737D'],
+:root:not(.dark) .markdown-content pre code span[style*='#85E89D'] {
+    color: #2f6f4f !important;
+}
+
+.markdown-content pre::-webkit-scrollbar {
+    height: 0.65rem;
+}
+
+.markdown-content pre::-webkit-scrollbar-thumb {
+    background: var(--markdown-code-scrollbar);
+    border: 3px solid var(--markdown-code-bg);
+    border-radius: 999px;
+}
+
+.markdown-content table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+}
+
+.markdown-content th,
+.markdown-content td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-border);
+    text-align: left;
+}
+
+.markdown-content img {
+    display: block;
+    width: 100%;
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--color-border);
+    cursor: zoom-in;
+    transition:
+        border-color var(--transition-speed) ease,
+        box-shadow var(--transition-speed) ease,
+        transform var(--transition-speed) ease;
+}
+
+.markdown-content img:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 10px 28px var(--color-shadow-lg);
+    transform: translateY(-1px);
+}
+
+.markdown-content img:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+}
+
+.markdown-content .theme-aware-diagram {
+    display: block;
+    width: min(100%, 720px);
+    margin: 0.35rem auto;
+}
+
+.markdown-content .theme-aware-diagram-dark {
+    display: none;
+}
+
+:root.dark .markdown-content .theme-aware-diagram-light {
+    display: none;
+}
+
+:root.dark .markdown-content .theme-aware-diagram-dark {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .markdown-content {
+        font-size: 1rem;
+    }
+
+    .markdown-content pre {
+        padding: 0.85rem 1rem;
+        border-radius: 6px;
+    }
+
+    .markdown-content blockquote {
+        padding: 0.9rem 1rem;
+    }
+
+    .markdown-content .markdown-question {
+        grid-template-columns: 1.75rem minmax(0, 1fr);
+        gap: 0.65rem;
+        padding: 0.8rem 0.9rem;
+    }
+
+    .markdown-content .markdown-question::before {
+        width: 1.75rem;
+        height: 1.75rem;
+    }
+
+    .markdown-content .markdown-senior-angle {
+        grid-template-columns: 1.75rem minmax(0, 1fr);
+        gap: 0.65rem;
+        padding: 0.85rem 0.9rem;
+    }
+
+    .markdown-content .markdown-senior-angle::before {
+        width: 1.6rem;
+        height: 1.6rem;
+    }
+
+    .markdown-content .markdown-callout {
+        grid-template-columns: 1.35rem minmax(0, 1fr);
+        gap: 0.7rem;
+        padding: 0.9rem 1rem;
+    }
+
+    .markdown-content .markdown-callout::before {
+        width: 1.15rem;
+        height: 1.15rem;
+    }
+
+    .markdown-content pre code {
+        font-size: 0.82rem;
+        line-height: 1.55;
+    }
+}

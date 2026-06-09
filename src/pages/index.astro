@@ -1,0 +1,64 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import CareerHighlights from '../components/CareerHighlights.astro';
+import BiographyPreview from '../components/BiographyPreview.astro';
+import { homeData } from '../data/home';
+import { siteConfig } from '../data/site';
+---
+
+<MainLayout
+    title={`${siteConfig.fullName} - ${siteConfig.role}`}
+    description={siteConfig.description}
+>
+    <section class="home-header hero">
+        <h1>{homeData.hero.heading}</h1>
+        <p class="subtitle">{homeData.hero.tagline}</p>
+        <CareerHighlights />
+    </section>
+
+    <BiographyPreview />
+</MainLayout>
+
+<style>
+    .hero {
+        max-width: var(--max-width-content);
+        margin: 0 auto;
+        padding: var(--spacing-xxl) var(--spacing-lg) var(--spacing-md);
+        text-align: center;
+    }
+
+    h1 {
+        font-size: 3rem;
+        margin-bottom: var(--spacing-md);
+        color: var(--color-secondary);
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .subtitle {
+        font-size: 1.25rem;
+        color: var(--color-text-light);
+        line-height: 1.8;
+        max-width: 700px;
+        margin: 0 auto var(--spacing-lg);
+    }
+
+    @media (max-width: 768px) {
+        .hero {
+            padding: var(--spacing-lg) var(--spacing-sm) var(--spacing-xs);
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            margin-bottom: var(--spacing-sm);
+            line-height: 1.3;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 100%;
+            margin: 0 auto var(--spacing-md);
+        }
+    }
+</style>

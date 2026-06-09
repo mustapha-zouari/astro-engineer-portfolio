@@ -1,0 +1,8 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Company logo placeholder</title>
+  <desc id="desc">Simple abstract company mark.</desc>
+  <rect width="160" height="160" rx="32" fill="#EFF6FF"/>
+  <rect x="34" y="58" width="92" height="68" rx="10" fill="#2563EB"/>
+  <path d="M58 58V42c0-6 5-10 10-10h24c6 0 10 4 10 10v16" stroke="#0F172A" stroke-width="10" stroke-linecap="round"/>
+  <path d="M54 86h52" stroke="#DBEAFE" stroke-width="10" stroke-linecap="round"/>
+</svg>

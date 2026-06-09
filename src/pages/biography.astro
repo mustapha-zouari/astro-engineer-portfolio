@@ -1,0 +1,100 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import ProfileImage from '../components/ProfileImage.astro';
+import CvTabs from '../components/CvTabs.astro';
+import { biographyData } from '../data/biography';
+import { siteConfig } from '../data/site';
+---
+
+<MainLayout
+    title={`${siteConfig.fullName} - ${biographyData.profile.pageTitleSuffix}`}
+    description={`${biographyData.profile.pageDescriptionPrefix} ${siteConfig.fullName}, ${siteConfig.role}`}
+>
+    <div class="cv-container">
+        <header class="cv-header">
+            <div class="profile-section">
+                <div class="image-wrapper">
+                    <ProfileImage size="large" />
+                </div>
+                <div class="header-text">
+                    <h1>{siteConfig.fullName}</h1>
+                    <p class="title">{siteConfig.role}</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Tab Navigation -->
+        <CvTabs />
+    </div>
+</MainLayout>
+
+<style>
+    .cv-container {
+        margin: 0 auto;
+    }
+
+    .cv-header {
+        text-align: center;
+        padding: var(--spacing-xxl) var(--spacing-lg) var(--spacing-md);
+        max-width: var(--max-width-content);
+        margin: 0 auto;
+    }
+
+    .profile-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-lg);
+    }
+
+    .image-wrapper {
+        position: relative;
+    }
+
+    .header-text {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        text-align: center;
+    }
+
+    .header-text h1 {
+        font-size: 3rem;
+        color: var(--color-secondary);
+        margin: 0;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .header-text .title {
+        font-size: 1.25rem;
+        color: var(--color-text-light);
+        font-weight: 500;
+        margin: 0;
+        line-height: 1.8;
+    }
+
+    @media (max-width: 768px) {
+        .cv-header {
+            padding: var(--spacing-lg) var(--spacing-sm) var(--spacing-xs);
+        }
+
+        .profile-section {
+            gap: var(--spacing-sm);
+        }
+
+        .header-text {
+            gap: var(--spacing-xs);
+        }
+
+        .header-text h1 {
+            font-size: 1.75rem;
+            line-height: 1.3;
+        }
+
+        .header-text .title {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+    }
+</style>

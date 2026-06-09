@@ -1,0 +1,58 @@
+---
+import Navbar from '../components/Navbar.astro';
+import Contact from '../components/Contact.astro';
+import ThemeToggler from '../components/ThemeToggler.astro';
+import BackToTop from '../components/BackToTop.astro';
+import { siteConfig } from '../data/site';
+import '../styles/global.css';
+
+interface Props {
+    title?: string;
+    description?: string;
+    author?: string;
+    keywords?: string;
+}
+
+const {
+    title = siteConfig.title,
+    description = siteConfig.description,
+    author = siteConfig.author,
+    keywords = siteConfig.keywords,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content={Astro.generator} />
+
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta name="author" content={author} />
+        <meta name="keywords" content={keywords} />
+
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+        <!-- Theme initialization - runs before page render to prevent flash -->
+        <script is:inline>
+            const darkClass = 'dark';
+            const localStorageUserThemeKey = 'user-theme-preference';
+            const previousTheme = window.localStorage.getItem(localStorageUserThemeKey);
+
+            if (previousTheme === 'DARK') {
+                document.documentElement.classList.add(darkClass);
+            }
+        </script>
+    </head>
+    <body>
+        <Navbar />
+        <main>
+            <slot />
+        </main>
+        <Contact />
+        <ThemeToggler />
+        <BackToTop />
+    </body>
+</html>

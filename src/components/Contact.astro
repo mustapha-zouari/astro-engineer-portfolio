@@ -1,0 +1,250 @@
+---
+import { contactData } from '../data/contact';
+import { siteConfig } from '../data/site';
+---
+
+<footer id="contact" class="contact-footer" data-contact-section>
+    <div class="contact-container">
+        <h2>{contactData.heading}</h2>
+        <ul class="contact-links">
+            {
+                contactData.links.map((contactLink) => (
+                    <li>
+                        <a
+                            href={contactLink.uri}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            data-contact-link={contactLink.label.toLowerCase()}
+                        >
+                            <div class="icon-wrapper">
+                                <span class="icon">{contactLink.icon}</span>
+                            </div>
+                            <div class="info" id={contactLink.label.toLowerCase()}>
+                                <span class="label">{contactLink.label}</span>
+                                <span class="value">{contactLink.value}</span>
+                            </div>
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+        <p class="copyright">
+            © {new Date().getFullYear()}
+            {siteConfig.fullName}.<br />
+            {contactData.rightsLabel}
+        </p>
+    </div>
+</footer>
+
+<script>
+    function handleContactFocus() {
+        const hash = window.location.hash.substring(1);
+
+        if (hash && hash !== 'contact') {
+            const targetLink = document.querySelector(
+                `[data-contact-link="${hash.toLowerCase()}"]`
+            ) as HTMLElement;
+
+            if (targetLink) {
+                const contactSection = document.querySelector('[data-contact-section]');
+                if (contactSection) {
+                    contactSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+
+                setTimeout(() => {
+                    targetLink.classList.add('focused');
+
+                    setTimeout(() => {
+                        targetLink.classList.remove('focused');
+                    }, 2000);
+                }, 500);
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', handleContactFocus);
+    window.addEventListener('hashchange', handleContactFocus);
+</script>
+
+<style>
+    .contact-footer {
+        background-color: var(--header-foot-bg);
+        color: var(--header-foot-text);
+        padding: 2rem 1rem;
+        margin-top: auto;
+        border-top: 1px solid var(--color-border);
+    }
+
+    .contact-container {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        color: var(--header-foot-text);
+    }
+
+    .contact-links {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 var(--spacing-lg) 0;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .contact-links li {
+        display: block;
+        flex: 0 1 auto;
+    }
+
+    .contact-links a {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-sm) var(--spacing-md);
+        background-color: var(--card-bg);
+        color: var(--color-text);
+        text-decoration: none;
+        border-radius: var(--border-radius);
+        border: 1px solid var(--card-border);
+        transition: all var(--transition-speed) ease;
+        box-shadow: 0 2px 4px var(--card-shadow);
+    }
+
+    .contact-links a:hover {
+        background-color: var(--color-primary);
+        color: #ffffff;
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px var(--color-shadow-lg);
+        border-color: var(--color-primary);
+    }
+
+    .contact-links a:hover .label,
+    .contact-links a:hover .value {
+        color: #ffffff;
+    }
+
+    .icon-wrapper {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        background: var(--color-bg-light);
+        border-radius: 50%;
+        border: 2px solid var(--color-border);
+        transition: all var(--transition-speed) ease;
+    }
+
+    .contact-links a:hover .icon-wrapper {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: scale(1.1);
+    }
+
+    .icon {
+        font-size: 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: var(--color-primary);
+        transition: all var(--transition-speed) ease;
+        font-family: var(--font-sans);
+        line-height: 1;
+    }
+
+    .contact-links a:hover .icon {
+        color: #ffffff;
+        transform: scale(1.1);
+    }
+
+    .contact-links a.focused {
+        animation: focusPulse 1s ease-in-out;
+        outline: 3px solid var(--color-primary);
+        outline-offset: 2px;
+    }
+
+    @keyframes focusPulse {
+        0%,
+        100% {
+            transform: translateY(0) scale(1);
+            box-shadow: 0 2px 4px var(--card-shadow);
+        }
+        50% {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 24px var(--color-shadow-lg);
+        }
+    }
+
+    .info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        flex: 1;
+        text-align: left;
+    }
+
+    .label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--color-text-lighter);
+    }
+
+    .value {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--color-text);
+        word-break: break-word;
+    }
+
+    .copyright {
+        font-size: 0.9rem;
+        color: var(--color-text-lighter);
+        margin-top: 1.5rem;
+        text-align: center;
+        line-height: 1.6;
+    }
+    @media (max-width: 768px) {
+        .contact-links {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .contact-links li {
+            flex: 1 1 100%;
+        }
+
+        .contact-links a {
+            padding: var(--spacing-sm);
+        }
+
+        .icon-wrapper {
+            width: 2.2rem;
+            height: 2.2rem;
+        }
+
+        .icon {
+            font-size: 1rem;
+        }
+
+        .label {
+            font-size: 0.65rem;
+        }
+
+        .value {
+            font-size: 0.8rem;
+        }
+    }
+</style>
