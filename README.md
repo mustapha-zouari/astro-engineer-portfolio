@@ -53,6 +53,7 @@ See [documentation/content-customization.md](documentation/content-customization
 - [Blog authoring](documentation/blog-authoring.md): how to add, draft, and publish blog articles.
 - [Technology and architecture](documentation/tech.md): project structure, data flow, and technical choices.
 - [Contributing](documentation/contributing.md): quality rules for future changes.
+- [Roadmap](documentation/roadmap.md): future contribution ideas such as SEO, LinkedIn import, and internationalization.
 
 ## ✍️ Blog Content
 
